@@ -14,7 +14,7 @@ Ru_channels = ['96Ru_96Ru',
 '104Ru_104Ru']
 
 # columns_to_ignore = ['Cell_Index', 'file_identifier', 'file_origin', 'Sample_ID-Cell_Index'] + Ru_channels
-columns_to_ignore = ['Cell_Index'] + Ru_channels
+columns_to_ignore = ['Cell_Index', 'Ru_mean'] + Ru_channels
 
 def normalise_file(filename):
     file_path = os.path.join(folder_path, filename)
@@ -33,6 +33,9 @@ def normalise_file(filename):
     # Perform the normalization only on the selected columns
     # The ‘normalisation’ step is just dividing each marker by the mean of the ruthenium channels.
     normalized_data = events[columns_to_normalize].div(ru_pos_events['Ru_mean'], axis=0)
+
+    # Set normalized values to 0 where Ru_mean <= 0.01, otherwise it will be NaN and not processable by CyGNAL
+    normalized_data[events['Ru_mean'] <= 0.01] = 0
 
     # Combine normalized and unnormalized columns, preserving original order
     data_normed = pd.concat([events[columns_to_ignore], normalized_data], axis=1)[events.columns]
