@@ -24,18 +24,16 @@ def normalise_file(filename):
 
     #Insert a column into the table the the mean Ruthenium). Note that Lucy says whilst you’re supposed to use all 7 channels, she only uses Ru100 and 101 - I think these are the most abundant naturally occuring isotopes.
     events.insert(9, 'Ru_mean', events[Ru_channels].mean(axis = 1))
+    
     #Filter out any 0 values and any really tiny values otherwise this will distort the data.
-    ru_pos_events = events[events['Ru_mean'] > 0.01]
+    events = events[events['Ru_mean'] > 0.01]
 
     # Separate the columns to normalize and the columns to leave as-is
     columns_to_normalize = events.columns.difference(columns_to_ignore)
 
     # Perform the normalization only on the selected columns
     # The ‘normalisation’ step is just dividing each marker by the mean of the ruthenium channels.
-    normalized_data = events[columns_to_normalize].div(ru_pos_events['Ru_mean'], axis=0)
-
-    # Set normalized values to 0 where Ru_mean <= 0.01, otherwise it will be NaN and not processable by CyGNAL
-    normalized_data[events['Ru_mean'] <= 0.01] = 0
+    normalized_data = events[columns_to_normalize].div(events['Ru_mean'], axis=0)
 
     # Combine normalized and unnormalized columns, preserving original order
     data_normed = pd.concat([events[columns_to_ignore], normalized_data], axis=1)[events.columns]
