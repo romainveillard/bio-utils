@@ -16,14 +16,17 @@ def normalise_file(filename):
     events = pd.read_csv(file_path, delimiter='\t')
     
     #Filter out any 0 values and any really tiny values otherwise this will distort the data.
-    events = events[events[normalisation_channel] > 0.01]
+    events_channel_pos = events[events[normalisation_channel] > 0.01]
 
     # Separate the columns to normalize and the columns to leave as-is
     columns_to_normalize = events.columns.difference(columns_to_ignore)
 
     # Perform the normalization only on the selected columns
     # The ‘normalisation’ step is just dividing each marker by the normalisation channel.
-    normalized_data = events[columns_to_normalize].div(events[normalisation_channel], axis=0)
+    normalized_data = events[columns_to_normalize].div(events_channel_pos[normalisation_channel], axis=0)
+
+    # Set normalized values to 0 where Ru_mean <= 0.01, otherwise it will be NaN and not processable by CyGNAL
+    normalized_data[events[normalisation_channel] <= 0.01] = 0
 
     # Combine normalized and unnormalized columns, preserving original order
     data_normed = pd.concat([events[columns_to_ignore], normalized_data], axis=1)[events.columns]
