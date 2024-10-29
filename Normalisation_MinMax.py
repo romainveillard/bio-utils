@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 
 # Specify the folder containing the CSV files and the output file name
 folder_path = '/Users/romain/Documents/Perso/aure/processed'
@@ -29,6 +30,9 @@ def normalise_file(filename):
 
     # Combine normalized and unnormalized columns, preserving original order
     data_normed = pd.concat([events[columns_to_ignore], normalized_data], axis=1)[events.columns]
+
+    # Filter to keep only rows with all finite values
+    data_normed = data_normed[np.isfinite(data_normed).all(axis=1)]
 
     # Write the normalised data to a file in the dedicated folder
     data_normed.to_csv(normalised_folder_path + "/normalised_" + filename, index=False, sep='\t')
