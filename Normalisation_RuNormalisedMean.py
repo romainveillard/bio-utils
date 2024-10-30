@@ -13,8 +13,10 @@ Ru_channels = ['96Ru_96Ru',
 '102Ru_102Ru',
 '104Ru_104Ru']
 
+mean_column = 'Ru_mean'
+
 # columns_to_ignore = ['Cell_Index', 'Ru_mean'] + Ru_channels
-columns_to_ignore = ['Cell_Index', 'Ru_mean']
+columns_to_ignore = ['Cell_Index', mean_column]
 
 # Function to normalise the RU channels first
 def normalise_ru_channels(events, ru_means):
@@ -24,14 +26,14 @@ def normalise_ru_channels(events, ru_means):
 # Function to correct all the values by the mean of the normalised Ru Channels
 def correct_values_by_mean(events):
     #Insert a column into the table the the mean Ruthenium). Note that Lucy says whilst you’re supposed to use all 7 channels, she only uses Ru100 and 101 - I think these are the most abundant naturally occuring isotopes.
-    events.insert(9, 'Ru_mean', events[Ru_channels].mean(axis = 1))
+    events.insert(9, mean_column, events[Ru_channels].mean(axis = 1))
     
     # Print how many rows will be filtered out along with their respective Ru_mean value
-    print(len(events[events['Ru_mean'] <= 0.01]))
-    print(events[events['Ru_mean'] <= 0.01])
+    print(len(events[events[mean_column] <= 0.01]))
+    print(events[events[mean_column] <= 0.01])
 
     #Filter out any 0 values and any really tiny values otherwise this will distort the data.
-    events = events[events['Ru_mean'] > 0.01]
+    events = events[events[mean_column] > 0.01]
 
     # Separate the columns to normalize and the columns to leave as-is
     columns_to_normalize = events.columns.difference(columns_to_ignore)
