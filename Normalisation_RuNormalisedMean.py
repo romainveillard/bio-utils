@@ -42,7 +42,7 @@ def correct_values_by_mean(events):
     normalized_data = events[columns_to_normalize].div(events['Ru_mean'], axis=0)
 
     # Combine normalized and unnormalized columns, preserving original order
-    events = pd.concat([events[columns_to_ignore], normalized_data], axis=1)[events.columns]
+    return pd.concat([events[columns_to_ignore], normalized_data], axis=1)[events.columns]
 
 
 # Function to normalise a single file using the RU channels
@@ -56,7 +56,7 @@ def normalise_file(filename):
     normalise_ru_channels(events)
 
     # Correct values by the Ru_mean
-    correct_values_by_mean(events)
+    events = correct_values_by_mean(events)
 
     # Write the normalised data to a file in the dedicated folder
     events.to_csv(normalised_folder_path + "/normalised_" + filename, index=False, sep='\t')
