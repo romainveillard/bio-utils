@@ -17,8 +17,7 @@ Ru_channels = ['96Ru_96Ru',
 columns_to_ignore = ['Cell_Index', 'Ru_mean']
 
 # Function to normalise the RU channels first
-def normalise_ru_channels(events):
-    ru_means = events[Ru_channels].mean()
+def normalise_ru_channels(events, ru_means):
     events[Ru_channels] = events[Ru_channels].div(ru_means)
 
 
@@ -46,14 +45,14 @@ def correct_values_by_mean(events):
 
 
 # Function to normalise a single file using the RU channels
-def normalise_file(filename):
+def normalise_file(filename, ru_means):
     file_path = os.path.join(folder_path, filename)
 
     # Join the cleaned lines and pass them to read_csv via StringIO
     events = pd.read_csv(file_path, delimiter='\t')
 
     # Normalise the Ru channels
-    normalise_ru_channels(events)
+    normalise_ru_channels(events, ru_means)
 
     # Correct values by the Ru_mean
     events = correct_values_by_mean(events)
@@ -63,15 +62,30 @@ def normalise_file(filename):
 
     print(f"Normalised file: {file_path}")
 
+def get_Ru_means():
+    all_events = pd.DataFrame()
+
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.txt'):
+            file_path = os.path.join(folder_path, filename)
+            # Load the file
+            events = pd.read_csv(file_path, delimiter='\t')
+            # Add the data to the overall DataFrame
+            all_events = pd.concat([all_events, events], ignore_index=True)
+    
+    return events[Ru_channels].mean()
+
 
 # Create the normalised folder
 normalised_folder_path = os.path.join(folder_path, "normalised")
 if not os.path.exists(normalised_folder_path):
     os.makedirs(normalised_folder_path)
 
+ru_means = get_Ru_means()
+
 # Loop through each file in the folder
 for filename in os.listdir(folder_path):
     if filename.endswith('.txt'):
         # Normalise the file
-        normalise_file(filename)
+        normalise_file(filename, ru_means)
         
