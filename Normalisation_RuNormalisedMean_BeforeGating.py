@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from fcswrite import FCSWriter
 
 #################################################
 # Declaration of constants to use in the script #
@@ -12,10 +13,10 @@ folder_path = '/Users/romain/Documents/Perso/aure/processed'
 Ru_channels = ['96Ru_96Ru_(Ru96Di)',
 '98Ru_98Ru_(Ru98Di)',
 '99Ru_99Ru_(Ru99Di)',
-'100Ru_100Ru_(Ru_100Di)',
-'101Ru_101Ru_(Ru_101Di)',
-'102Ru_102Ru_(Ru_102Di)',
-'104Ru_104Ru_(Ru_104Di)']
+'100Ru_100Ru_(Ru100Di)',
+'101Ru_101Ru_(Ru101Di)',
+'102Ru_102Ru_(Ru102Di)',
+'104Ru_104Ru_(Ru104Di)']
 
 # Name of the column which contains the mean of RU channels for a single cell
 single_cell_RU_mean_column = 'Ru_mean'
@@ -73,8 +74,11 @@ def normalise_file(filename, ru_means):
     # Correct values by the Ru_mean
     events = correct_values_by_mean(events)
 
+    output_path = normalised_folder_path + "/normalised_" + filename
     # Write the normalised data to a file in the dedicated folder
-    events.to_csv(normalised_folder_path + "/normalised_" + filename, index=False, sep='\t')
+    # events.to_csv(output_path, index=False, sep='\t')
+    with FCSWriter(output_path) as writer:
+        writer.write(events, chn_names=events.columns.tolist())
 
     print(f"Normalised file: {file_path}")
 
