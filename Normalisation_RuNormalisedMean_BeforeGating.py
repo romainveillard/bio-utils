@@ -9,13 +9,13 @@ import pandas as pd
 folder_path = '/Users/romain/Documents/Perso/aure/processed'
 
 # Name of the RU channels columns
-Ru_channels = ['96Ru_96Ru',
-'98Ru_98Ru',
-'99Ru_99Ru',
-'100Ru_100Ru',
-'101Ru_101Ru',
-'102Ru_102Ru',
-'104Ru_104Ru']
+Ru_channels = ['96Ru_96Ru_(Ru96Di)',
+'98Ru_98Ru_(Ru98Di)',
+'99Ru_99Ru_(Ru99Di)',
+'100Ru_100Ru_(Ru_100Di)',
+'101Ru_101Ru_(Ru_101Di)',
+'102Ru_102Ru_(Ru_102Di)',
+'104Ru_104Ru_(Ru_104Di)']
 
 # Name of the column which contains the mean of RU channels for a single cell
 single_cell_RU_mean_column = 'Ru_mean'
