@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from fcswrite import FCSWriter
+import fcswrite
 
 #################################################
 # Declaration of constants to use in the script #
@@ -74,11 +74,10 @@ def normalise_file(filename, ru_means):
     # Correct values by the Ru_mean
     events = correct_values_by_mean(events)
 
-    output_path = normalised_folder_path + "/normalised_" + filename
+    output_path = normalised_folder_path + "/normalised_" + filename + '.fcs'
     # Write the normalised data to a file in the dedicated folder
     # events.to_csv(output_path, index=False, sep='\t')
-    with FCSWriter(output_path) as writer:
-        writer.write(events, chn_names=events.columns.tolist())
+    fcswriter.write_fcs(output_path, events.columns.tolist(), events)
 
     print(f"Normalised file: {file_path}")
 
