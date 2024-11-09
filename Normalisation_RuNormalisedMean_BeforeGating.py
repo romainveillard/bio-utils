@@ -77,7 +77,7 @@ def normalise_file(filename, ru_means):
     output_path = normalised_folder_path + "/normalised_" + filename + '.fcs'
     # Write the normalised data to a file in the dedicated folder
     # events.to_csv(output_path, index=False, sep='\t')
-    fcswriter.write_fcs(output_path, events.columns.tolist(), events, 
+    fcswrite.write_fcs(output_path, events.columns.tolist(), events, 
         compat_chn_names=False, compat_negative=False, compat_percent=False)
 
     print(f"Normalised file: {file_path}")
