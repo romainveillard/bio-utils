@@ -10,20 +10,33 @@ import fcswrite
 folder_path = '/Users/romain/Documents/Perso/aure/processed'
 
 # Name of the RU channels columns
-Ru_channels = ['96Ru_96Ru_(Ru96Di)',
-'98Ru_98Ru_(Ru98Di)',
-'99Ru_99Ru_(Ru99Di)',
-'100Ru_100Ru_(Ru100Di)',
-'101Ru_101Ru_(Ru101Di)',
-'102Ru_102Ru_(Ru102Di)',
-'104Ru_104Ru_(Ru104Di)']
+Ru_channels = [
+    '96Ru_96Ru_(Ru96Di)',
+    '98Ru_98Ru_(Ru98Di)',
+    '99Ru_99Ru_(Ru99Di)',
+    '100Ru_100Ru_(Ru100Di)',
+    '101Ru_101Ru_(Ru101Di)',
+    '102Ru_102Ru_(Ru102Di)',
+    '104Ru_104Ru_(Ru104Di)'
+]
 
 # Name of the column which contains the mean of RU channels for a single cell
 single_cell_RU_mean_column = 'Ru_mean'
 
 # Columms to ignore in the normalisation
 # All the metadata columns, and the "horizontal mean" column
-columns_to_ignore = ['Event #', 'Time', 'Event_length', 'Width', 'Residual', 'Residual', single_cell_RU_mean_column]
+columns_to_ignore = [
+    'Event #', 
+    'Time', 
+    'Event_length', 
+    'Center', 
+    'Width', 
+    'Residual', 
+    'Offset', 
+    'Amplitude', 
+    # '140Ce_EQ Beads_(Ce140Di)',
+    single_cell_RU_mean_column
+]
 
 #################################################
 # Function to normalise the RU channels first,  #
